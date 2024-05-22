@@ -1,24 +1,51 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import { GlobalProvider } from './context/GlobalState';
+import Header from './components/Header';
+import Balance from './components/Balance';
+import IncomeExpenses from './components/IncomeExpenses';
+import TransactionList from './components/TransactionList';
+import AddTransaction from './components/AddTransaction';
+import Download from './components/Download';
 
 function App() {
+  const [darkMode, setDarkMode] = useState(false);
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+    if (!darkMode) {
+      document.body.style.backgroundColor = '#042743';
+      document.body.style.color = 'white';
+    } else {
+      document.body.style.backgroundColor = 'white';
+      document.body.style.color = 'black';
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <GlobalProvider>
+      <div className={`App ${darkMode ? 'dark-mode' : ''}`}>
+        <Header darkMode={darkMode} />
+        <div className="container">
+          <Balance darkMode={darkMode} />
+          <IncomeExpenses darkMode={darkMode} />
+          <TransactionList darkMode={darkMode} />
+          <AddTransaction darkMode={darkMode} />
+          <Download darkMode={darkMode} />
+        </div>
+        <div className="dark-mode-switch">
+          <label className="form-check-label" htmlFor="darkModeSwitch" style={{ color: darkMode ? 'white' : 'black', marginRight: '10px' }}>Dark Mode</label>
+          <input
+            className="form-check-input"
+            type="checkbox"
+            role="switch"
+            id="darkModeSwitch"
+            checked={darkMode}
+            onChange={toggleDarkMode}
+          />
+        </div>
+      </div>
+    </GlobalProvider>
   );
 }
 
